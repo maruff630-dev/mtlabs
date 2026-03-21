@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #2563eb;
+  --color-primary-hover: #1d4ed8;
+  --color-background: #ffffff;
+  --color-foreground: #0f172a;
+  --color-glass-bg: rgba(255, 255, 255, 0.75);
+  --color-glass-border: rgba(0, 0, 0, 0.05);
+  --font-sans: "Inter", system-ui, sans-serif;
+}
+
+@layer utilities {
+  .glassmorphism {
+    @apply backdrop-blur-2xl bg-[var(--color-glass-bg)] border border-[var(--color-glass-border)] shadow-xl;
+  }
+}
+
+body {
+  @apply bg-background text-foreground font-sans;
+}
