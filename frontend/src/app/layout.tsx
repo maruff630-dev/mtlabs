@@ -23,6 +23,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  console.log("RootLayout: Clerk Key present?", !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
   return (
     <ClerkProvider publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}>
       <html
@@ -30,7 +31,7 @@ export default function RootLayout({
         suppressHydrationWarning
         className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       >
-        <body className="min-h-full flex flex-col">{children}</body>
+        <body suppressHydrationWarning className="min-h-full flex flex-col">{children}</body>
       </html>
     </ClerkProvider>
   );

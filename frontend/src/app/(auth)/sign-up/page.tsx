@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from 'react';
 import Image from "next/image";
 import Link from "next/link";
 import { Mail, Lock, User, ArrowRight, Facebook, Apple } from "lucide-react";
@@ -7,7 +8,14 @@ import { motion } from "framer-motion";
 import { useSignUp } from "@clerk/nextjs";
 
 export default function SignUpPage() {
-  const { signUp, isLoaded } = useSignUp() as any;
+  const signUpResult = useSignUp();
+  const { signUp, isLoaded, fetchStatus } = signUpResult as any;
+  const isAuthReady = isLoaded || (fetchStatus !== 'loading' && fetchStatus !== 'fetching' && !!signUpResult);
+
+  useEffect(() => {
+    console.log("SignUpPage: Clerk fetchStatus:", fetchStatus);
+    console.log("SignUpPage: isAuthReady:", isAuthReady);
+  }, [isAuthReady, fetchStatus]);
 
   const handleOAuth = async (strategy: any) => {
     try {
@@ -55,7 +63,7 @@ export default function SignUpPage() {
       <div className="flex flex-col gap-3 mb-8">
         <button 
           onClick={() => handleOAuth('oauth_google')} 
-          disabled={!isLoaded}
+          disabled={!isAuthReady}
           type="button" 
           className="w-full flex justify-center items-center px-4 py-3.5 border border-slate-300 rounded-xl shadow-sm bg-white text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:border-slate-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
         >
@@ -65,13 +73,13 @@ export default function SignUpPage() {
               <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
               <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
             </svg>
-            {isLoaded ? "Continue with Google" : "Loading auth..."}
+            {isAuthReady ? "Continue with Google" : "Loading auth..."}
         </button>
         
         <div className="grid grid-cols-2 gap-3">
           <button 
             onClick={() => handleOAuth('oauth_facebook')} 
-            disabled={!isLoaded}
+            disabled={!isAuthReady}
             type="button" 
             className="w-full flex justify-center items-center px-4 py-3 border border-slate-300 rounded-xl shadow-sm bg-white text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:border-slate-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
           >
@@ -80,7 +88,7 @@ export default function SignUpPage() {
           </button>
           <button 
             onClick={() => handleOAuth('oauth_apple')} 
-            disabled={!isLoaded}
+            disabled={!isAuthReady}
             type="button" 
             className="w-full flex justify-center items-center px-4 py-3 border border-slate-300 rounded-xl shadow-sm bg-white text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:border-slate-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
           >

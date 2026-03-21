@@ -40,9 +40,9 @@ export default function AnimatedSidePanel() {
   }, []);
 
   return (
-    <div className="hidden lg:flex w-1/2 relative bg-indigo-600 shadow-2xl items-center justify-center overflow-hidden">
+    <div suppressHydrationWarning className="hidden lg:flex w-1/2 relative bg-indigo-600 shadow-2xl items-center justify-center overflow-hidden">
       {/* Top Left Logo */}
-      <div className="absolute top-10 left-10 z-30 flex items-center gap-4">
+      <div suppressHydrationWarning className="absolute top-10 left-10 z-30 flex items-center gap-4">
          <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-md border border-white/30 shadow-2xl">
            <Beaker className="w-8 h-8 text-white" />
          </div>
@@ -79,6 +79,7 @@ export default function AnimatedSidePanel() {
               delay: i * 0.5
             }}
             className="absolute p-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl"
+            suppressHydrationWarning
             style={{
               top: `${15 + (i * 25) % 70}%`,
               left: `${10 + (i * 30) % 80}%`,
