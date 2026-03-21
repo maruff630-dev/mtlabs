@@ -41,6 +41,14 @@ export default function AnimatedSidePanel() {
 
   return (
     <div className="hidden lg:flex w-1/2 relative bg-indigo-600 shadow-2xl items-center justify-center overflow-hidden">
+      {/* Top Left Logo */}
+      <div className="absolute top-10 left-10 z-30 flex items-center gap-4">
+         <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-md border border-white/30 shadow-2xl">
+           <Beaker className="w-8 h-8 text-white" />
+         </div>
+         <h1 className="text-4xl font-black text-white tracking-tighter drop-shadow-2xl">MT Labs</h1>
+      </div>
+
       {/* Dynamic Background Gradient shifting */}
       <motion.div 
         animate={{
@@ -84,13 +92,6 @@ export default function AnimatedSidePanel() {
 
       {/* Auto Typing Text Content */}
       <div className="relative z-20 w-full max-w-lg px-12">
-        <div className="flex items-center gap-3 mb-8">
-           <div className="p-3 bg-white/20 rounded-xl backdrop-blur-md border border-white/30">
-             <Beaker className="w-8 h-8 text-white" />
-           </div>
-           <h1 className="text-3xl font-extrabold text-white tracking-tight drop-shadow-md">MT Labs</h1>
-        </div>
-
         <div className="h-[120px] flex items-center">
           <AnimatePresence mode="wait">
             <motion.p
