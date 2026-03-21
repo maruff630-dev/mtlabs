@@ -9,13 +9,21 @@ import { useSignIn } from "@clerk/nextjs";
 export default function SignInPage() {
   const { signIn, isLoaded } = useSignIn() as any;
 
-  const handleOAuth = (strategy: any) => {
-    if (!isLoaded || !signIn) return;
-    signIn.authenticateWithRedirect({
+  const handleOAuth = async (strategy: any) => {
+    if (!isLoaded || !signIn) {
+      alert("System Error: API Keys are not loaded. Please restart your Next.js development server (npm run dev) so it can catch the updated .env.local file!");
+      return;
+    }
+    try {
+      await signIn.authenticateWithRedirect({
       strategy,
       redirectUrl: '/sso-callback',
       redirectUrlComplete: '/'
-    });
+      });
+    } catch (error) {
+      console.error("OAuth Error:", error);
+      alert("OAuth Error: " + (error as Error).message);
+    }
   };
 
   return (
