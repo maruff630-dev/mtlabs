@@ -15,14 +15,15 @@ export default function SignInPage() {
       return;
     }
     try {
+      console.log("Starting OAuth redirect for sign-in strategy:", strategy);
       await signIn.authenticateWithRedirect({
-      strategy,
-      redirectUrl: '/sso-callback',
-      redirectUrlComplete: '/'
+        strategy,
+        redirectUrl: '/sso-callback',
+        redirectUrlComplete: '/'
       });
     } catch (error) {
-      console.error("OAuth Error:", error);
-      alert("OAuth Error: " + (error as Error).message);
+      console.error("OAuth SignIn Error detailed:", error);
+      alert("SignIn Error: " + (error as any).message + "\n\nPlease check if this email is already registered with another provider or if the Redirect URI is correctly set in Clerk.");
     }
   };
 

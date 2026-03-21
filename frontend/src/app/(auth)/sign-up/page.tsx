@@ -15,14 +15,15 @@ export default function SignUpPage() {
       return;
     }
     try {
+      console.log("Starting OAuth redirect for strategy:", strategy);
       await signUp.authenticateWithRedirect({
-      strategy,
-      redirectUrl: '/sso-callback',
-      redirectUrlComplete: '/'
+        strategy,
+        redirectUrl: '/sso-callback',
+        redirectUrlComplete: '/'
       });
     } catch (error) {
-      console.error("OAuth Error:", error);
-      alert("OAuth Error: " + (error as Error).message);
+      console.error("OAuth Error detailed:", error);
+      alert("Common Error: " + (error as any).message + "\n\nTip: Make sure you are using a consistent URL (e.g., http://localhost:3000) and that the Social Connection is fully configured in Clerk Dashboard.");
     }
   };
 
