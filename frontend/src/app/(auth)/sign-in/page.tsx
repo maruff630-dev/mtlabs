@@ -5,22 +5,24 @@ import Image from "next/image";
 import Link from "next/link";
 import { Mail, Lock, ArrowRight, Facebook, Apple } from "lucide-react";
 import { motion } from "framer-motion";
-import { useSignIn } from "@clerk/nextjs";
+import { useSignIn, useClerk } from "@clerk/nextjs";
 
 export default function SignInPage() {
+  const { client } = useClerk();
   const signInResult = useSignIn();
   const { signIn, isLoaded, fetchStatus } = signInResult as any;
   const isAuthReady = isLoaded || (fetchStatus !== 'loading' && fetchStatus !== 'fetching' && !!signInResult);
 
   useEffect(() => {
-    console.log("SignInPage: Clerk fetchStatus:", fetchStatus);
-    console.log("SignInPage: isAuthReady:", isAuthReady);
-  }, [isAuthReady, fetchStatus]);
+    if (isAuthReady) {
+      console.log("SignInPage: Auth is ready");
+    }
+  }, [isAuthReady]);
 
   const handleOAuth = async (strategy: any) => {
     try {
-      console.log("Starting OAuth redirect for sign-in strategy:", strategy);
-      await signIn.authenticateWithRedirect({
+      console.log("Starting OAuth redirect via Clerk Client for strategy:", strategy);
+      await client.signIn.authenticateWithRedirect({
         strategy,
         redirectUrl: '/sso-callback',
         redirectUrlComplete: '/'
