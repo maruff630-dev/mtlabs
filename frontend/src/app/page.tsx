@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Beaker, BrainCircuit, Rocket, Zap, Sparkles, TestTubeDiagonal, Code2 } from "lucide-react";
+import { ArrowRight, Beaker, BrainCircuit, Rocket, Zap, Sparkles, TestTubeDiagonal, Code2, LayoutDashboard } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
+import { useAuth, UserButton } from "@clerk/nextjs";
 
 const ICONS = [
   { Icon: Beaker, color: "text-blue-400" },
@@ -17,13 +18,14 @@ const ICONS = [
 ];
 
 export default function Home() {
+  const { isSignedIn, isLoaded: authLoaded } = useAuth();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  if (!mounted) return null;
+  if (!mounted || !authLoaded) return null;
 
   return (
     <div className="min-h-screen w-full flex flex-col items-center justify-center relative overflow-hidden bg-slate-950">
@@ -117,22 +119,42 @@ export default function Home() {
           transition={{ delay: 0.8 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-6"
         >
-          <Link 
-            href="/sign-in" 
-            className="group relative flex items-center justify-center px-10 py-5 text-lg font-bold text-white overflow-hidden rounded-2xl transition-all w-full sm:w-auto"
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 transition-all group-hover:scale-105 group-active:scale-95" />
-            <span className="relative z-10 flex items-center">
-              Sign In to Dashboard
-              <ArrowRight className="ml-2 w-6 h-6 group-hover:translate-x-1 transition-transform" />
-            </span>
-          </Link>
-          <Link 
-            href="/sign-up" 
-            className="group relative flex items-center justify-center px-10 py-5 text-lg font-bold text-slate-300 border border-slate-700 bg-slate-900/50 backdrop-blur-md rounded-2xl hover:bg-slate-800 hover:text-white hover:border-slate-500 transition-all w-full sm:w-auto"
-          >
-            Create an account
-          </Link>
+          {!isSignedIn ? (
+            <>
+              <Link 
+                href="/sign-in" 
+                className="group relative flex items-center justify-center px-10 py-5 text-lg font-bold text-white overflow-hidden rounded-2xl transition-all w-full sm:w-auto"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 transition-all group-hover:scale-105 group-active:scale-95" />
+                <span className="relative z-10 flex items-center">
+                  Sign In to Dashboard
+                  <ArrowRight className="ml-2 w-6 h-6 group-hover:translate-x-1 transition-transform" />
+                </span>
+              </Link>
+              <Link 
+                href="/sign-up" 
+                className="group relative flex items-center justify-center px-10 py-5 text-lg font-bold text-slate-300 border border-slate-700 bg-slate-900/50 backdrop-blur-md rounded-2xl hover:bg-slate-800 hover:text-white hover:border-slate-500 transition-all w-full sm:w-auto"
+              >
+                Create an account
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link 
+                href="/dashboard" 
+                className="group relative flex items-center justify-center px-10 py-5 text-lg font-bold text-white overflow-hidden rounded-2xl transition-all w-full sm:w-auto"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 transition-all group-hover:scale-105 group-active:scale-95" />
+                <span className="relative z-10 flex items-center">
+                  Open Dashboard
+                  <LayoutDashboard className="ml-2 w-6 h-6 group-hover:scale-110 transition-transform" />
+                </span>
+              </Link>
+              <div className="scale-125 ml-2 p-1 bg-white/10 rounded-full backdrop-blur-md border border-white/20">
+                <UserButton />
+              </div>
+            </>
+          )}
         </motion.div>
 
         {/* Bottom feature badges */}
