@@ -12,7 +12,7 @@ export default function SignInPage() {
   const router = useRouter();
   const { client } = useClerk();
   const signInObj = useSignIn();
-  const { isLoaded, signIn, setActive } = signInObj as any;
+  const { signIn, setActive } = signInObj as any;
   
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");

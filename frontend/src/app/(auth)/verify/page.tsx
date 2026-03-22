@@ -11,7 +11,7 @@ export default function VerifyPage() {
   const router = useRouter();
   const signUpObj = useSignUp();
   // Using as any to safely destructure newer hooks properties based on our v7 API integration
-  const { isLoaded, signUp, setActive } = signUpObj as any;
+  const { signUp, setActive } = signUpObj as any;
   
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
@@ -19,7 +19,7 @@ export default function VerifyPage() {
 
   const onPressVerify = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
-    if (!isLoaded || !signUp) return;
+    if (!signUp) return;
     
     if (code.length !== 6) return;
 

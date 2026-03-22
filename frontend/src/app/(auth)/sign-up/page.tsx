@@ -12,7 +12,7 @@ export default function SignUpPage() {
   const router = useRouter();
   const { client } = useClerk();
   const signUpObj = useSignUp();
-  const { isLoaded, signUp } = signUpObj as any;
+  const { signUp } = signUpObj as any;
   
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -51,7 +51,7 @@ export default function SignUpPage() {
 
   const submitForm = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isLoaded || !signUp) return;
+    if (!signUp) return;
     
     setLoading(true);
     setError("");
