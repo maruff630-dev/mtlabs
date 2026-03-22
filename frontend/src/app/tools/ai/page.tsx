@@ -86,21 +86,78 @@ const BADGE_STYLES: Record<string, string> = {
 export default function AIStudio() {
   const [active, setActive] = useState<string | null>(null);
   const [chatInput, setChatInput] = useState("");
-  const [messages, setMessages] = useState<{ role: "user" | "ai"; text: string }[]>([]);
+  const [messages, setMessages] = useState<{ role: "user" | "assistant"; content: string }[]>([]);
   const [thinking, setThinking] = useState(false);
   const [imgPrompt, setImgPrompt] = useState("");
   const [generatedImg, setGeneratedImg] = useState<string | null>(null);
 
   const handleChat = async () => {
-    if (!chatInput.trim()) return;
+    if (!chatInput.trim() || thinking) return;
     const userMsg = chatInput.trim();
     setChatInput("");
-    setMessages(prev => [...prev, { role: "user", text: userMsg }]);
+    
+    // 1. Add user message
+    const newMessages: { role: "user" | "assistant"; content: string }[] = [
+      ...messages,
+      { role: "user", content: userMsg }
+    ];
+    setMessages(newMessages);
     setThinking(true);
-    // Simulated AI response (replace with real API call)
-    await new Promise(r => setTimeout(r, 1200));
-    setMessages(prev => [...prev, { role: "ai", text: `I'm MT Labs AI. You said: "${userMsg}". Real AI responses coming soon — connect your API key in settings!` }]);
-    setThinking(false);
+
+    try {
+      const response = await fetch("/api/ai/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: newMessages }),
+      });
+
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.error || "AI failed");
+      }
+
+      const reader = response.body?.getReader();
+      if (!reader) throw new Error("No reader");
+
+      setThinking(false);
+      
+      // 2. Add empty assistant message to start streaming into
+      setMessages(prev => [...prev, { role: "assistant", content: "" }]);
+      
+      const decoder = new TextDecoder();
+      let fullContent = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        
+        const chunk = decoder.decode(value);
+        const lines = chunk.split("\n").filter(l => l.trim().startsWith("data: "));
+        
+        for (const line of lines) {
+          const dataStr = line.replace("data: ", "").trim();
+          if (dataStr === "[DONE]") continue;
+          
+          try {
+            const data = JSON.parse(dataStr);
+            const content = data.choices[0]?.delta?.content || "";
+            fullContent += content;
+            
+            // 3. Update the last message in state
+            setMessages(prev => {
+              const updated = [...prev];
+              updated[updated.length - 1].content = fullContent;
+              return updated;
+            });
+          } catch (e) {
+            console.error("error parsing stream chunk", e);
+          }
+        }
+      }
+    } catch (err: any) {
+      setThinking(false);
+      setMessages(prev => [...prev, { role: "assistant", content: `Error: ${err.message || "Failed to get response"}` }]);
+    }
   };
 
   return (
@@ -185,8 +242,8 @@ export default function AIStudio() {
                 )}
                 {messages.map((m, i) => (
                   <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
-                    <div className={`max-w-[80%] px-4 py-3 rounded-2xl text-sm font-medium leading-relaxed ${m.role === "user" ? "bg-blue-600 text-white rounded-br-sm" : "bg-slate-100 text-slate-800 rounded-bl-sm"}`}>
-                      {m.text}
+                    <div className={`max-w-[80%] px-4 py-3 rounded-2xl text-sm font-medium leading-relaxed whitespace-pre-wrap ${m.role === "user" ? "bg-blue-600 text-white rounded-br-sm" : "bg-slate-100 text-slate-800 rounded-bl-sm"}`}>
+                      {m.content}
                     </div>
                   </div>
                 ))}
