@@ -60,15 +60,18 @@ export default function SignUpPage() {
     setError("");
 
     try {
-      await signUp.create({
+      const { error: createError } = await signUp.create({
         firstName,
         lastName,
         emailAddress,
         password,
       });
+      if (createError) throw createError;
 
       // Send verification email
-      await signUp.prepareVerification({ strategy: "email_code" });
+      const { error: sendError } = await signUp.verifications.sendEmailCode();
+      if (sendError) throw sendError;
+      
       setPendingVerification(true);
     } catch (err: any) {
       setError(err.errors?.[0]?.message || err.message);
@@ -88,14 +91,16 @@ export default function SignUpPage() {
     setError("");
 
     try {
-      const completeSignUp = await signUp.attemptVerification({
-        strategy: "email_code",
+      const { error: verifyError } = await signUp.verifications.verifyEmailCode({
         code: verificationCode,
       });
-      if (completeSignUp.status !== 'complete') {
+      if (verifyError) throw verifyError;
+      
+      if (signUp.status !== 'complete') {
         setError("Missing requirements. Please try again.");
       } else {
-        await setActive({ session: completeSignUp.createdSessionId });
+        const { error: finalizeError } = await signUp.finalize();
+        if (finalizeError) throw finalizeError;
         router.push("/dashboard");
       }
     } catch (err: any) {
