@@ -44,7 +44,7 @@ export default function AnimatedSidePanel() {
       {/* Top Left Logo */}
       <div suppressHydrationWarning className="absolute top-10 left-8 z-30 flex items-center group">
          <Image src="/mt-labs-logo.png" width={84} height={84} alt="MT Labs" className="drop-shadow-2xl group-hover:scale-110 transition-transform duration-300" />
-         <h1 className="text-4xl font-black text-white tracking-tighter drop-shadow-2xl -ml-4 -mt-2">MT Labs</h1>
+         <h1 className="text-4xl font-black text-white tracking-tighter drop-shadow-2xl -ml-4 -mt-5">MT Labs</h1>
       </div>
 
       {/* Dynamic Background Gradient shifting */}
