@@ -68,7 +68,7 @@ export default function SignUpPage() {
       });
 
       // Send verification email
-      await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
+      await signUp.prepareVerification({ strategy: "email_code" });
       setPendingVerification(true);
     } catch (err: any) {
       setError(err.errors?.[0]?.message || err.message);
@@ -88,7 +88,8 @@ export default function SignUpPage() {
     setError("");
 
     try {
-      const completeSignUp = await signUp.attemptEmailAddressVerification({
+      const completeSignUp = await signUp.attemptVerification({
+        strategy: "email_code",
         code: verificationCode,
       });
       if (completeSignUp.status !== 'complete') {
@@ -243,6 +244,8 @@ export default function SignUpPage() {
                   ))}
                 </div>
               </div>
+
+              <div id="clerk-captcha" />
 
               <button type="submit" disabled={loading} className="w-full py-2 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-lg shadow-blue-500/20 transition-all flex justify-center items-center mt-4 disabled:opacity-70">
                 {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Create Account"}
