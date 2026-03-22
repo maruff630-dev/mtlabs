@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 
 // Credit cost table for each quality tier
 export const UPSCALE_COSTS = {
-  HD: 50,
+  HD: 100,
   "2K": 300,
   "4K": 500,
 } as const;
