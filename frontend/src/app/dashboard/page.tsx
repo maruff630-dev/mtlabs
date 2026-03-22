@@ -5,7 +5,7 @@ import { UserButton, useUser } from "@clerk/nextjs";
 import { motion } from "framer-motion";
 import { 
   BrainCircuit, Rocket, Zap, Sparkles, 
-  Video, ShoppingBag, FileText, Bot, ShieldCheck, Download, ArrowRight
+  Video, ShoppingBag, FileText, Bot, ShieldCheck, Download, ArrowRight, Music2
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -47,7 +47,8 @@ export default function Dashboard() {
         <nav className="flex-1 py-6 flex flex-col gap-2 px-3 overflow-y-auto overflow-x-hidden">
            {[
              { icon: BrainCircuit, label: 'Dashboard', active: true, href: '/dashboard' },
-                       { icon: Video, label: 'Video Toolkit', href: '/tools/video-downloader' },
+             { icon: Video, label: 'Video Toolkit', href: '/tools/video-downloader' },
+             { icon: Music2, label: 'TikTok Downloader', href: '/tools/tiktok-downloader' },
              { icon: Sparkles, label: 'AI Studio', href: '/tools/ai' },
              { icon: ShoppingBag, label: 'Marketplace', href: '/marketplace' },
            ].map((item, i) => (
