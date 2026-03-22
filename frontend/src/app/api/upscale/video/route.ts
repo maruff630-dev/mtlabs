@@ -5,44 +5,44 @@ const replicate = new Replicate({
   auth: process.env.REPLICATE_API_TOKEN,
 });
 
-// Scale map for quality tiers
-const SCALE_MAP: Record<string, number> = {
-  HD: 2,
-  "2K": 3,
-  "4K": 4,
+// Resolution map for quality tiers
+const RESOLUTION_MAP: Record<string, string> = {
+  HD:  "1080p",
+  "2K": "2k",
+  "4K": "4k",
 };
 
 export async function POST(req: NextRequest) {
   try {
-    const { imageUrl, quality } = await req.json();
+    const { videoUrl, quality } = await req.json();
 
-    if (!imageUrl) {
-      return NextResponse.json({ error: "imageUrl is required" }, { status: 400 });
+    if (!videoUrl) {
+      return NextResponse.json({ error: "videoUrl is required" }, { status: 400 });
     }
 
     if (!process.env.REPLICATE_API_TOKEN) {
       return NextResponse.json({ error: "Replicate API token not configured" }, { status: 500 });
     }
 
-    const scale = SCALE_MAP[quality] ?? 2;
+    const targetResolution = RESOLUTION_MAP[quality] ?? "1080p";
 
-    // Real-ESRGAN — best for all types of images/thumbnails/video frames
+    // Topaz Labs Video Upscale — real video upscaling with 4K + 60fps support
     const output = await replicate.run(
-      "nightmareai/real-esrgan:f121d640bd286e1fdc67f9799164c1d5be36ff74576ee11c803ae5b665dd46aa",
+      "topazlabs/video-upscale",
       {
         input: {
-          image: imageUrl,
-          scale,
-          face_enhance: false,
+          video: videoUrl,
+          target_fps: 60,
+          target_resolution: targetResolution,
         },
       }
     );
 
     const outputUrl = typeof output === "string" ? output : (output as any)?.url?.() || String(output);
 
-    return NextResponse.json({ url: outputUrl, scale, quality });
+    return NextResponse.json({ url: outputUrl, quality, resolution: targetResolution });
   } catch (err: any) {
-    console.error("Real-ESRGAN error:", err);
-    return NextResponse.json({ error: err.message || "Upscaling failed" }, { status: 500 });
+    console.error("Topaz Video Upscale error:", err);
+    return NextResponse.json({ error: err.message || "Video upscaling failed" }, { status: 500 });
   }
 }

@@ -188,12 +188,12 @@ export default function VideoDownloader() {
     try {
       let upscaledUrl: string | null = null;
 
-      // Only call real AI if it's a short video with a real thumbnail
-      if (meta.isShort && meta.thumbnail) {
+      // Only call real AI if it's a short video with a real URL
+      if (meta.isShort && url) {
         const res = await fetch("/api/upscale/video", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ imageUrl: meta.thumbnail, quality: selectedQuality }),
+          body: JSON.stringify({ videoUrl: url, quality: selectedQuality }),
         });
         const data = await res.json();
         if (data.url) upscaledUrl = data.url;
