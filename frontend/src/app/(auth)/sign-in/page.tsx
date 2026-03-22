@@ -44,7 +44,7 @@ export default function SignInPage() {
       <div className="text-center mb-8">
         <div className="flex justify-center mb-6">
            <Image 
-             src="/logo.png" 
+             src="/mt-labs-logo.png" 
              width={64} 
              height={64} 
              alt="MT Labs Logo" 

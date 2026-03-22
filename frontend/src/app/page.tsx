@@ -89,7 +89,7 @@ export default function Home() {
         >
           <div className="relative p-1 rounded-3xl bg-gradient-to-br from-blue-100 to-purple-100 shadow-xl shadow-blue-500/10">
             <div className="bg-white rounded-[22px] p-5 border border-white/50">
-              <Image src="/logo.png" width={80} height={80} alt="MT Labs" className="drop-shadow-sm" />
+              <Image src="/mt-labs-logo.png" width={80} height={80} alt="MT Labs" className="drop-shadow-sm" />
             </div>
           </div>
         </motion.div>

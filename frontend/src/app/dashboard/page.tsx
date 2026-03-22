@@ -2,8 +2,9 @@
 
 import { UserButton, useUser } from "@clerk/nextjs";
 import { motion } from "framer-motion";
-import { LayoutDashboard, Beaker, BrainCircuit, Rocket, Zap, Sparkles } from "lucide-react";
+import { LayoutDashboard, BrainCircuit, Rocket, Zap, Sparkles } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Dashboard() {
   const { user, isLoaded } = useUser();
@@ -16,8 +17,8 @@ export default function Dashboard() {
       <nav className="border-b border-white/10 bg-slate-900/50 backdrop-blur-xl sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="p-2 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl group-hover:scale-110 transition-transform">
-              <Beaker className="w-6 h-6 text-white" />
+            <div className="p-1 bg-white rounded-xl group-hover:scale-110 transition-transform">
+              <Image src="/mt-labs-logo.png" width={32} height={32} alt="MT Labs" />
             </div>
             <span className="text-2xl font-black tracking-tight">MT Labs</span>
           </Link>
