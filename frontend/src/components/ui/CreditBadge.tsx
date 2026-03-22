@@ -11,7 +11,7 @@ interface Plan {
 }
 
 const PLANS: Plan[] = [
-  { credits: 2000,  price: "200 BDT" },
+  { credits: 2000,  price: "350 BDT" },
   { credits: 10000, price: "1,200 BDT", badge: "Popular" },
   { credits: 50000, price: "5,000 BDT", badge: "Best Value" },
 ];
