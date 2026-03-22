@@ -38,7 +38,7 @@ export default function SignInPage() {
 
   const submitForm = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isLoaded) return;
+    if (!signIn) return;
     
     setLoading(true);
     setError("");

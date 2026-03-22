@@ -54,7 +54,7 @@ export default function SignUpPage() {
 
   const submitForm = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isLoaded) return;
+    if (!signUp) return;
     
     setLoading(true);
     setError("");
