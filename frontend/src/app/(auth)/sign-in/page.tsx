@@ -1,18 +1,25 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Mail, Lock, ArrowRight, Facebook, Apple, Eye, EyeOff, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useSignIn, useClerk } from "@clerk/nextjs";
+import { useSignIn, useClerk, useUser } from "@clerk/nextjs";
 
 export default function SignInPage() {
   const router = useRouter();
   const { client } = useClerk();
   const signInObj = useSignIn();
   const { signIn, setActive } = signInObj as any;
+  const { isSignedIn, isLoaded } = useUser();
+
+  // Already logged in → go to dashboard
+  useEffect(() => {
+    if (isLoaded && isSignedIn) router.replace("/dashboard");
+  }, [isLoaded, isSignedIn, router]);
+
   
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
