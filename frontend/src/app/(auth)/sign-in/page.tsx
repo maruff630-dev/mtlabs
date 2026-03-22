@@ -11,7 +11,8 @@ import { useSignIn, useClerk } from "@clerk/nextjs";
 export default function SignInPage() {
   const router = useRouter();
   const { client } = useClerk();
-  const { isLoaded, signIn, setActive } = useSignIn();
+  const signInObj = useSignIn();
+  const { isLoaded, signIn, setActive } = signInObj as any;
   
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
@@ -101,7 +102,7 @@ export default function SignInPage() {
       <div className="flex flex-col gap-3">
         <button 
           onClick={() => handleOAuth('oauth_google')} 
-          disabled={!isLoaded || loadingProvider !== null}
+          disabled={loadingProvider !== null}
           type="button" 
           className="w-full flex justify-center items-center px-4 py-3 border border-slate-300 rounded-xl shadow-sm bg-white text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:border-slate-400 disabled:opacity-50 transition-all cursor-pointer"
         >
@@ -121,7 +122,7 @@ export default function SignInPage() {
         <div className="grid grid-cols-2 gap-3">
           <button 
             onClick={() => handleOAuth('oauth_facebook')} 
-            disabled={!isLoaded || loadingProvider !== null}
+            disabled={loadingProvider !== null}
             type="button" 
             className="flex justify-center items-center px-4 py-3 border border-slate-300 rounded-xl shadow-sm bg-white text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-all"
           >
@@ -130,7 +131,7 @@ export default function SignInPage() {
           </button>
           <button 
             onClick={() => handleOAuth('oauth_apple')} 
-            disabled={!isLoaded || loadingProvider !== null}
+            disabled={loadingProvider !== null}
             type="button" 
             className="flex justify-center items-center px-4 py-3 border border-slate-300 rounded-xl shadow-sm bg-white text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-all"
           >
