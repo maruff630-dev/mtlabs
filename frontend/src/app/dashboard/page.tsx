@@ -49,10 +49,10 @@ export default function Dashboard() {
             </motion.h2>
             <p className="text-slate-500 text-lg font-medium">Your universal workspace for tools, apps, and automation.</p>
           </div>
-          <button className="px-6 py-3 bg-gradient-to-r from-slate-800 to-slate-900 text-white rounded-xl font-bold shadow-lg shadow-slate-900/20 hover:shadow-slate-900/40 hover:-translate-y-0.5 transition-all flex items-center gap-2">
+          <Link href="/developer/apply" className="px-6 py-3 bg-gradient-to-r from-slate-800 to-slate-900 text-white rounded-xl font-bold shadow-lg shadow-slate-900/20 hover:shadow-slate-900/40 hover:-translate-y-0.5 transition-all flex items-center gap-2">
             <Rocket className="w-5 h-5 text-blue-400" />
             Become a Developer
-          </button>
+          </Link>
         </header>
 
         {/* Quick Stats */}
@@ -94,8 +94,8 @@ export default function Dashboard() {
               </div>
               <p className="text-slate-600 mb-8 max-w-sm">Download TikTok/YouTube videos without watermark, extract frames, and enhance to 4K effortlessly.</p>
               <div className="flex flex-wrap gap-3">
-                <button className="px-5 py-2.5 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-colors shadow-md shadow-blue-500/20">Video Downloader</button>
-                <button className="px-5 py-2.5 bg-white text-slate-700 rounded-xl font-bold border border-slate-200 hover:bg-slate-50 transition-colors shadow-sm">AI Video Enhancer</button>
+                <Link href="/tools/video-downloader" className="px-5 py-2.5 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-colors shadow-md shadow-blue-500/20">Video Downloader</Link>
+                <Link href="/tools/video-enhancer" className="px-5 py-2.5 bg-white text-slate-700 rounded-xl font-bold border border-slate-200 hover:bg-slate-50 transition-colors shadow-sm">AI Video Enhancer</Link>
               </div>
             </div>
             <Sparkles className="absolute -bottom-10 -right-10 w-48 h-48 text-blue-500/10 group-hover:rotate-12 group-hover:scale-110 transition-transform duration-700" />
@@ -109,7 +109,7 @@ export default function Dashboard() {
                 <h3 className="text-2xl font-bold">Developer Hub</h3>
               </div>
               <p className="text-slate-400 mb-8 text-sm">Publish your apps and digital products. Setup Telegram automation bots.</p>
-              <button className="w-full px-5 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-xl font-bold transition-colors shadow-lg shadow-blue-500/25">Publish New App</button>
+              <Link href="/developer/apply" className="w-full flex justify-center px-5 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-xl font-bold transition-colors shadow-lg shadow-blue-500/25">Apply for Developer Account</Link>
             </div>
             <Bot className="absolute -bottom-6 -right-6 w-32 h-32 text-white/5 group-hover:-translate-y-4 transition-transform duration-700" />
           </div>
@@ -123,9 +123,9 @@ export default function Dashboard() {
               <h3 className="text-xl font-bold text-slate-800 mb-2">PDF & AI Docs</h3>
               <p className="text-slate-500 text-sm mb-6">Edit PDFs, generate AI content, and extract text seamlessly.</p>
             </div>
-            <button className="text-rose-600 font-bold flex items-center gap-2 group-hover:gap-3 transition-all w-fit mt-auto cursor-pointer">
+            <Link href="/tools/pdf-studio" className="text-rose-600 font-bold flex items-center gap-2 group-hover:gap-3 transition-all w-fit mt-auto cursor-pointer">
               Open PDF Studio <ArrowRight className="w-4 h-4" />
-            </button>
+            </Link>
           </div>
 
           {/* Digital Marketplace */}
@@ -137,19 +137,19 @@ export default function Dashboard() {
               <h3 className="text-xl font-bold text-slate-800 mb-2">Marketplace</h3>
               <p className="text-slate-500 text-sm mb-6">Buy and sell premium source codes, assets, and digital tools.</p>
             </div>
-            <button className="text-emerald-600 font-bold flex items-center gap-2 group-hover:gap-3 transition-all w-fit mt-auto cursor-pointer">
+            <Link href="/marketplace" className="text-emerald-600 font-bold flex items-center gap-2 group-hover:gap-3 transition-all w-fit mt-auto cursor-pointer">
               Browse Store <ArrowRight className="w-4 h-4" />
-            </button>
+            </Link>
           </div>
 
           {/* Admin Panel Link */}
-          <div className="p-8 bg-slate-50 border border-slate-200 border-dashed rounded-[32px] flex flex-col justify-center items-center text-center group cursor-pointer hover:bg-slate-100 transition-colors">
+          <Link href="/admin/panel" className="p-8 bg-slate-50 border border-slate-200 border-dashed rounded-[32px] flex flex-col justify-center items-center text-center group hover:bg-slate-100 transition-colors">
             <div className="w-12 h-12 bg-slate-200 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
               <ShieldCheck className="w-6 h-6 text-slate-600" />
             </div>
             <h3 className="text-lg font-bold text-slate-700">Admin Review Panel</h3>
             <p className="text-slate-500 text-xs mt-2 max-w-[200px]">Moderate users and approve developer applications.</p>
-          </div>
+          </Link>
 
         </div>
       </main>
