@@ -85,13 +85,9 @@ export default function Home() {
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.1, type: "spring", stiffness: 200, damping: 15 }}
-          className="flex justify-center mb-10"
+          className="flex justify-center mb-8"
         >
-          <div className="relative p-1 rounded-3xl bg-gradient-to-br from-blue-100 to-purple-100 shadow-xl shadow-blue-500/10">
-            <div className="bg-white rounded-[22px] p-5 border border-white/50">
-              <Image src="/mt-labs-logo.png" width={80} height={80} alt="MT Labs" className="drop-shadow-sm" />
-            </div>
-          </div>
+          <Image src="/mt-labs-logo.png" width={160} height={160} alt="MT Labs" className="drop-shadow-2xl hover:scale-105 transition-transform duration-300" />
         </motion.div>
         
         <motion.h1 
