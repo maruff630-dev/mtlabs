@@ -10,11 +10,13 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import { Skeleton, SkeletonText, SkeletonCard, SkeletonStatCard } from "@/components/ui/Skeleton";
+import { useCredits } from "@/hooks/useCredits";
 
 export default function Dashboard() {
   const { user, isLoaded } = useUser();
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const { credits } = useCredits();
 
   // Simulate an API data fetching phase for the dynamic skeleton system demo
   useEffect(() => {
@@ -136,7 +138,7 @@ export default function Dashboard() {
             ))
           ) : (
             [
-              { label: 'Cloud Credits', value: '1,000', icon: Zap, color: 'text-amber-500', bg: 'bg-amber-100' },
+              { label: 'Cloud Credits', value: credits.toLocaleString(), icon: Zap, color: 'text-amber-500', bg: 'bg-amber-100' },
               { label: 'Apps Owned', value: '3', icon: Rocket, color: 'text-blue-500', bg: 'bg-blue-100' },
               { label: 'Downloads', value: '12', icon: Download, color: 'text-emerald-500', bg: 'bg-emerald-100' },
               { label: 'AI Tokens', value: '500', icon: BrainCircuit, color: 'text-purple-500', bg: 'bg-purple-100' }
