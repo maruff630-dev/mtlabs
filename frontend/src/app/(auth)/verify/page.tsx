@@ -27,16 +27,17 @@ export default function VerifyPage() {
     setError("");
 
     try {
-      const completeSignUp = await signUp.attemptVerification({
-        strategy: "email_code",
+      const { error: verifyError } = await signUp.verifications.verifyEmailCode({
         code,
       });
+      if (verifyError) throw verifyError;
       
-      if (completeSignUp.status !== 'complete') {
+      if (signUp.status !== 'complete') {
         setError("Missing requirements. Please try again.");
         setLoading(false);
       } else {
-        await setActive({ session: completeSignUp.createdSessionId });
+        const { error: finalizeError } = await signUp.finalize();
+        if (finalizeError) throw finalizeError;
         router.push("/dashboard");
       }
     } catch (err: any) {
@@ -136,7 +137,7 @@ export default function VerifyPage() {
 
       <div className="text-center pt-2">
           <p className="text-xs font-semibold text-slate-500">
-             Didn&apos;t receive a code? <button type="button" onClick={() => signUp?.prepareVerification({ strategy: "email_code" })} className="text-blue-600 hover:text-blue-700 hover:underline inline-flex items-center">Resend now</button>
+             Didn&apos;t receive a code? <button type="button" onClick={() => signUp?.verifications.sendEmailCode()} className="text-blue-600 hover:text-blue-700 hover:underline inline-flex items-center">Resend now</button>
           </p>
       </div>
 
