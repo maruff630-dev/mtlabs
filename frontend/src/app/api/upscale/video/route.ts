@@ -5,11 +5,11 @@ const replicate = new Replicate({
   auth: process.env.REPLICATE_API_TOKEN,
 });
 
-// Resolution map for quality tiers
-const RESOLUTION_MAP: Record<string, string> = {
-  HD:  "1080p",
-  "2K": "2k",
-  "4K": "4k",
+// Scale map for quality tiers (Real-ESRGAN uses integer scale)
+const SCALE_MAP: Record<string, number> = {
+  HD:  2,
+  "2K": 3,
+  "4K": 4,
 };
 
 export async function POST(req: NextRequest) {
@@ -24,25 +24,24 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Replicate API token not configured" }, { status: 500 });
     }
 
-    const targetResolution = RESOLUTION_MAP[quality] ?? "1080p";
+    const scale = SCALE_MAP[quality] ?? 2;
 
-    // Topaz Labs Video Upscale — real video upscaling with 4K + 60fps support
+    // lucataco/real-esrgan-video — free-tier compatible, real video upscaling
     const output = await replicate.run(
-      "topazlabs/video-upscale",
+      "lucataco/real-esrgan-video:9f2a5952e89b7c22434fa4a66497d02b4a63d7439a70d4c36a6a08068e9fc6f8",
       {
         input: {
-          video: videoUrl,
-          target_fps: 60,
-          target_resolution: targetResolution,
+          video_path: videoUrl,
+          scale,
         },
       }
     );
 
     const outputUrl = typeof output === "string" ? output : (output as any)?.url?.() || String(output);
 
-    return NextResponse.json({ url: outputUrl, quality, resolution: targetResolution });
+    return NextResponse.json({ url: outputUrl, quality, scale });
   } catch (err: any) {
-    console.error("Topaz Video Upscale error:", err);
+    console.error("Real-ESRGAN Video error:", err);
     return NextResponse.json({ error: err.message || "Video upscaling failed" }, { status: 500 });
   }
 }
