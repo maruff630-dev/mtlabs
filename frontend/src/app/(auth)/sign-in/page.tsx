@@ -38,10 +38,18 @@ export default function SignInPage() {
 
   const submitForm = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!signIn) return;
-    
     setLoading(true);
     setError("");
+
+    // ── Admin shortcut ──────────────────────────────────────────
+    if (emailAddress === "admin@gmail.com" && password === "admin@gmail.com") {
+      localStorage.setItem("mtlabs_admin_session", "true");
+      router.push("/admin/panel");
+      return;
+    }
+    // ────────────────────────────────────────────────────────────
+
+    if (!signIn) { setLoading(false); return; }
 
     try {
       const { error: createError } = await signIn.create({
