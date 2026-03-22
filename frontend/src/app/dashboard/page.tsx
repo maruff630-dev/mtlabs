@@ -14,6 +14,7 @@ import { Skeleton, SkeletonText, SkeletonCard, SkeletonStatCard } from "@/compon
 export default function Dashboard() {
   const { user, isLoaded } = useUser();
   const [isDataLoaded, setIsDataLoaded] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   // Simulate an API data fetching phase for the dynamic skeleton system demo
   useEffect(() => {
@@ -26,30 +27,77 @@ export default function Dashboard() {
   if (!isLoaded) return null;
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 selection:bg-blue-500/30">
-      {/* Top Navbar */}
-      <nav className="border-b border-slate-200 bg-white/80 backdrop-blur-xl sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3 group">
-            <Image src="/mt-labs-logo.png" width={48} height={48} alt="MT Labs" className="group-hover:scale-110 transition-transform drop-shadow-md" />
-            <span className="text-2xl font-black text-slate-800 tracking-tight">MT Labs</span>
-          </Link>
-          
-          <div className="flex items-center gap-6">
-            <div className="hidden md:flex items-center gap-2 px-4 py-2 bg-slate-100 rounded-full border border-slate-200">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-sm font-bold text-slate-600">System Online</span>
-            </div>
-            <div className="scale-110 ml-2 p-1 bg-white rounded-full shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+    <div className="min-h-screen bg-slate-50 text-slate-900 selection:bg-blue-500/30 flex">
+      {/* Desktop Retractable Sidebar */}
+      <aside 
+        className={`fixed inset-y-0 left-0 z-50 bg-white border-r border-slate-200 transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] shadow-2xl shadow-slate-200/50 hidden md:flex flex-col 
+        ${isHovered ? 'w-64' : 'w-20'}`}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        {/* Logo Area */}
+        <Link href="/" className="h-20 flex items-center justify-center border-b border-slate-100 shrink-0 hover:bg-slate-50 transition-colors">
+          <Image src="/mt-labs-logo.png" width={40} height={40} alt="MT Labs" className={`transition-all duration-300 ${isHovered ? 'mr-3 scale-100' : 'scale-110'}`} />
+          {isHovered && <span className="text-xl font-black text-slate-800 tracking-tight whitespace-nowrap overflow-hidden">MT Labs</span>}
+        </Link>
+
+        {/* Navigation Links */}
+        <nav className="flex-1 py-6 flex flex-col gap-2 px-3 overflow-y-auto overflow-x-hidden">
+           {[
+             { icon: BrainCircuit, label: 'Dashboard', active: true },
+             { icon: Video, label: 'Video Toolkit' },
+             { icon: Sparkles, label: 'AI Studio' },
+             { icon: ShoppingBag, label: 'Marketplace' },
+             { icon: ShieldCheck, label: 'Admin Panel' }
+           ].map((item, i) => (
+              <button key={i} className={`flex items-center h-12 rounded-xl transition-all group overflow-hidden shrink-0 border border-transparent
+                ${item.active ? 'bg-blue-50 text-blue-600 border-blue-100' : 'text-slate-500 hover:bg-slate-50 hover:border-slate-200'}
+                ${isHovered ? 'px-4 justify-start' : 'justify-center mx-auto w-12'}
+              `}>
+                 <item.icon className={`w-5 h-5 shrink-0 transition-colors ${item.active ? 'text-blue-600' : 'text-slate-400 group-hover:text-slate-600'}`} />
+                 {isHovered && <span className="ml-4 font-bold text-sm whitespace-nowrap">{item.label}</span>}
+              </button>
+           ))}
+        </nav>
+
+        {/* Bottom Area */}
+        <div className="p-4 border-t border-slate-100 flex flex-col gap-4">
+          <div className={`flex items-center h-10 rounded-xl bg-slate-50 border border-slate-100 shrink-0 transition-all ${isHovered ? 'px-4 justify-start' : 'justify-center mx-auto w-10'}`}>
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+            {isHovered && <span className="ml-3 text-xs font-bold text-slate-600 whitespace-nowrap">System Online</span>}
+          </div>
+
+          <div className={`flex items-center rounded-xl hover:bg-slate-50 transition-all border border-transparent hover:border-slate-100 ${isHovered ? 'px-2 py-2' : 'justify-center py-2'}`}>
+            <div className="scale-110 shrink-0">
               <UserButton />
             </div>
+            {isHovered && (
+              <div className="ml-4 flex flex-col items-start overflow-hidden">
+                <span className="text-sm font-bold text-slate-700 whitespace-nowrap">My Account</span>
+                <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">{user?.firstName || 'User'}</span>
+              </div>
+            )}
+          </div>
+        </div>
+      </aside>
+
+      {/* Mobile Top Navbar (Hidden on Desktop) */}
+      <nav className="md:hidden fixed top-0 w-full border-b border-slate-200 bg-white/80 backdrop-blur-xl z-30">
+        <div className="px-6 h-20 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-3">
+            <Image src="/mt-labs-logo.png" width={40} height={40} alt="MT Labs" className="drop-shadow-md" />
+            <span className="text-xl font-black text-slate-800 tracking-tight">MT Labs</span>
+          </Link>
+          <div className="scale-110 p-1 bg-white rounded-full shadow-sm border border-slate-100">
+            <UserButton />
           </div>
         </div>
       </nav>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-6 py-12">
-        <header className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+      <main className="flex-1 md:ml-20 transition-all duration-300 w-full pt-20 md:pt-0">
+        <div className="max-w-7xl mx-auto px-6 py-8 md:py-12">
+          <header className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="w-full max-w-lg">
             {!isDataLoaded ? (
               <div className="space-y-4">
@@ -195,6 +243,7 @@ export default function Dashboard() {
             </>
           )}
 
+        </div>
         </div>
       </main>
     </div>

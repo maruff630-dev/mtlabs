@@ -18,10 +18,10 @@ export function Skeleton({ className = "", ...props }: React.HTMLAttributes<HTML
     <>
       <style dangerouslySetInnerHTML={{ __html: shimmerStyles }} />
       <div
-        className={`relative overflow-hidden bg-slate-200/60 dark:bg-slate-800/60 rounded-[16px] ${className}`}
+        className={`relative overflow-hidden bg-slate-200/60 rounded-[16px] ${className}`}
         {...props}
       >
-        <div className="absolute inset-0 z-10 animate-shimmer bg-gradient-to-r from-transparent via-white/50 dark:via-white/10 to-transparent" />
+        <div className="absolute inset-0 z-10 animate-shimmer bg-gradient-to-r from-transparent via-white/50 to-transparent" />
       </div>
     </>
   );
@@ -54,7 +54,7 @@ export function SkeletonProfile({ className = "" }: { className?: string }) {
 
 export function SkeletonCard({ className = "" }: { className?: string }) {
   return (
-    <div className={`p-6 bg-white dark:bg-slate-900 rounded-[24px] border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col ${className}`}>
+    <div className={`p-6 bg-white rounded-[24px] border border-slate-100 shadow-sm flex flex-col ${className}`}>
       <Skeleton className="h-12 w-12 rounded-[14px] mb-5" />
       <Skeleton className="h-6 w-3/4 rounded-md mb-3" />
       <SkeletonText lines={2} className="mb-6 flex-1" />
@@ -85,7 +85,7 @@ export function SkeletonDetails({ className = "" }: { className?: string }) {
 
 export function SkeletonStatCard({ className = "" }: { className?: string }) {
   return (
-    <div className={`p-6 bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col justify-between ${className}`}>
+    <div className={`p-6 bg-white rounded-3xl border border-slate-100 shadow-sm flex flex-col justify-between ${className}`}>
        <div className="flex justify-between items-center mb-4">
          <Skeleton className="w-12 h-12 rounded-2xl" />
          <Skeleton className="w-16 h-8 rounded-lg" />
