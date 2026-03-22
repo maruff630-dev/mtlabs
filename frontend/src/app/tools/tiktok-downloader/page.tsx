@@ -173,27 +173,32 @@ export default function TikTokDownloader() {
               exit={{ opacity: 0, y: 20 }} className="rounded-[28px] overflow-hidden shadow-2xl"
               style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)" }}
             >
-              {/* Thumbnail */}
-              <div className="relative" style={{ aspectRatio: data.width && data.height ? `${data.width}/${data.height}` : "9/16", maxHeight: "480px", overflow: "hidden" }}>
+              {/* Thumbnail — centered, fixed height */}
+              <div className="relative w-full flex items-center justify-center overflow-hidden"
+                style={{ height: "360px", background: "rgba(0,0,0,0.4)" }}>
                 {data.thumbnail ? (
-                  <img src={data.thumbnail} alt="thumbnail" className="w-full h-full object-cover" />
+                  <img src={data.thumbnail} alt="thumbnail"
+                    className="h-full w-auto max-w-full object-contain rounded-lg"
+                    style={{ filter: "drop-shadow(0 8px 40px rgba(0,0,0,0.6))" }} />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center" style={{ background: "linear-gradient(135deg, #ff0050, #00f2ea)" }}>
+                  <div className="w-40 h-full flex items-center justify-center rounded-lg"
+                    style={{ background: "linear-gradient(135deg, #ff0050, #00f2ea)" }}>
                     <Music2 className="w-16 h-16 text-white/40" />
                   </div>
                 )}
-                {/* Overlay gradient */}
-                <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 60%)" }} />
+                {/* Bottom gradient */}
+                <div className="absolute inset-0 pointer-events-none"
+                  style={{ background: "linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 50%)" }} />
 
-                {/* Play icon */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-16 h-16 rounded-full flex items-center justify-center"
-                    style={{ background: "rgba(255,255,255,0.2)", backdropFilter: "blur(8px)", border: "2px solid rgba(255,255,255,0.3)" }}>
-                    <Play className="w-7 h-7 text-white ml-1" fill="white" />
+                {/* Play button */}
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <div className="w-14 h-14 rounded-full flex items-center justify-center"
+                    style={{ background: "rgba(255,255,255,0.18)", backdropFilter: "blur(8px)", border: "2px solid rgba(255,255,255,0.3)" }}>
+                    <Play className="w-6 h-6 text-white ml-1" fill="white" />
                   </div>
                 </div>
 
-                {/* Duration badge */}
+                {/* Duration */}
                 {data.duration && (
                   <div className="absolute bottom-3 right-3 flex items-center gap-1 px-2.5 py-1 rounded-lg text-white text-xs font-bold"
                     style={{ background: "rgba(0,0,0,0.7)", backdropFilter: "blur(4px)" }}>
@@ -226,12 +231,9 @@ export default function TikTokDownloader() {
                       boxShadow: "0 8px 32px rgba(255,0,80,0.3)",
                     }}
                   >
-                    {downloading
-                      ? <><Loader2 className="w-5 h-5 animate-spin" /> Downloading...</>
-                      : downloaded
-                      ? <><CheckCircle2 className="w-5 h-5" /> Downloaded!</>
-                      : <><Download className="w-5 h-5" /> Download Without Watermark</>
-                    }
+                    {downloading ? <><Loader2 className="w-5 h-5 animate-spin" /> Downloading...</>
+                      : downloaded ? <><CheckCircle2 className="w-5 h-5" /> Downloaded!</>
+                      : <><Download className="w-5 h-5" /> Download Without Watermark</>}
                   </button>
                 ) : (
                   <div className="w-full py-4 text-center text-white/40 font-semibold text-sm rounded-2xl"
