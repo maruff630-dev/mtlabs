@@ -44,6 +44,9 @@ const COST_LABELS: Record<UpscaleQuality, string> = { HD: "100 cr", "2K": "300 c
 
 // ─── Fetch metadata ─────────────────────────────────────────────────
 async function fetchVideoMeta(url: string): Promise<VideoMeta | null> {
+  // Redirect TikTok to dedicated page
+  if (url.includes("tiktok.com")) return null;
+
   try {
     // YouTube Shorts
     const shortsMatch = url.match(/youtube\.com\/shorts\/([\w-]{11})/);
@@ -75,27 +78,27 @@ async function fetchVideoMeta(url: string): Promise<VideoMeta | null> {
         directUrl: url,
       };
     }
-    // TikTok
-    if (url.includes("tiktok.com")) {
-      const oembed = await fetch(`https://noembed.com/embed?url=${encodeURIComponent(url)}`).then(r => r.json()).catch(() => ({}));
-      // Try multiple thumbnail sources for TikTok
-      const thumb = oembed.thumbnail_url || "";
-      return {
-        platform: "TikTok",
-        thumbnail: thumb,
-        title: oembed.title || "TikTok Video",
-        author: oembed.author_name || "TikTok",
-        durationSec: 30, isShort: true,
-        directUrl: url,
-      };
-    }
     // Instagram
     if (url.includes("instagram.com")) {
-      return { platform: "Instagram", thumbnail: "", title: "Instagram Reel", author: "Instagram", durationSec: 30, isShort: true, directUrl: url };
+      const oembed = await fetch(`https://noembed.com/embed?url=${encodeURIComponent(url)}`).then(r => r.json()).catch(() => ({}));
+      return {
+        platform: "Instagram",
+        thumbnail: oembed.thumbnail_url || "",
+        title: oembed.title || "Instagram Reel",
+        author: oembed.author_name || "Instagram",
+        durationSec: 30, isShort: true, directUrl: url,
+      };
     }
     // Facebook
-    if (url.includes("facebook.com")) {
-      return { platform: "Facebook", thumbnail: "", title: "Facebook Video", author: "Facebook", durationSec: null, isShort: false, directUrl: url };
+    if (url.includes("facebook.com") || url.includes("fb.watch")) {
+      const oembed = await fetch(`https://noembed.com/embed?url=${encodeURIComponent(url)}`).then(r => r.json()).catch(() => ({}));
+      return {
+        platform: "Facebook",
+        thumbnail: oembed.thumbnail_url || "",
+        title: oembed.title || "Facebook Video",
+        author: oembed.author_name || "Facebook",
+        durationSec: null, isShort: false, directUrl: url,
+      };
     }
     return null;
   } catch { return null; }
@@ -275,7 +278,7 @@ export default function VideoDownloader() {
                 </div>
                 <input
                   type="url" value={url} onChange={e => setUrl(e.target.value)}
-                  placeholder="Paste YouTube, TikTok, Instagram or Facebook URL..."
+                  placeholder="Paste YouTube, Instagram or Facebook URL..."
                   className="w-full pl-14 pr-20 py-5 bg-white border-2 border-slate-200 rounded-2xl text-base text-slate-800 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all outline-none font-medium placeholder:text-slate-400 shadow-sm"
                 />
                 <div className="absolute inset-y-0 right-0 pr-4 flex items-center gap-2">
@@ -283,6 +286,19 @@ export default function VideoDownloader() {
                   {url && !fetching && <button type="button" onClick={() => setUrl("")} className="text-slate-400 hover:text-slate-700 font-bold text-sm px-2">Clear</button>}
                 </div>
               </div>
+
+              {/* TikTok redirect notice */}
+              {url.includes("tiktok.com") && (
+                <motion.div initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }}
+                  className="mt-3 flex items-center gap-3 p-3.5 rounded-2xl bg-gradient-to-r from-pink-50 to-violet-50 border border-pink-200 text-sm font-semibold text-pink-700"
+                >
+                  <span className="text-base">🎵</span>
+                  TikTok videos have a dedicated page!
+                  <Link href="/tools/tiktok-downloader" className="ml-auto text-xs bg-pink-600 text-white px-3 py-1.5 rounded-xl font-black hover:bg-pink-700 transition-colors whitespace-nowrap">
+                    Go to TikTok Page →
+                  </Link>
+                </motion.div>
+              )}
             </motion.div>
 
             {/* Split layout */}
