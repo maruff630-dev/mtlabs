@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Beaker, BrainCircuit, Rocket, Zap, Sparkles, TestTubeDiagonal, Code2 } from "lucide-react";
+import { BrainCircuit, Rocket, Zap, Sparkles, TestTubeDiagonal, Code2 } from "lucide-react";
+import Image from "next/image";
 
 const SENTENCES = [
   "Publish your developer tools to the world.",
@@ -26,8 +27,7 @@ const SENTENCES = [
   "Integrate Stripe payments in one click.",
   "Welcome to the future of developer platforms."
 ];
-
-const ICONS = [Beaker, BrainCircuit, Rocket, Zap, Sparkles, TestTubeDiagonal, Code2];
+const ICONS = [BrainCircuit, Rocket, Zap, Sparkles, TestTubeDiagonal, Code2];
 
 export default function AnimatedSidePanel() {
   const [index, setIndex] = useState(0);
@@ -42,9 +42,9 @@ export default function AnimatedSidePanel() {
   return (
     <div suppressHydrationWarning className="hidden lg:flex w-1/2 relative bg-indigo-600 shadow-2xl items-center justify-center overflow-hidden">
       {/* Top Left Logo */}
-      <div suppressHydrationWarning className="absolute top-10 left-10 z-30 flex items-center gap-4">
-         <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-md border border-white/30 shadow-2xl">
-           <Beaker className="w-8 h-8 text-white" />
+      <div suppressHydrationWarning className="absolute top-10 left-10 z-30 flex items-center gap-4 group">
+         <div className="p-2 bg-white rounded-2xl shadow-xl group-hover:scale-110 transition-transform">
+           <Image src="/mt-labs-logo.png" width={40} height={40} alt="MT Labs" />
          </div>
          <h1 className="text-4xl font-black text-white tracking-tighter drop-shadow-2xl">MT Labs</h1>
       </div>
