@@ -44,22 +44,20 @@ export default function SignInPage() {
     setError("");
 
     try {
-      const { error: createError } = await signIn.create({
+      const result = await signIn.create({
         identifier: emailAddress,
         password,
       });
-      if (createError) throw createError;
 
-      if (signIn.status === "complete") {
-        const { error: finalizeError } = await signIn.finalize();
-        if (finalizeError) throw finalizeError;
+      if (result.status === "complete") {
+        await setActive({ session: result.createdSessionId });
         router.push("/dashboard");
       } else {
         setError("Further verification requirements needed.");
+        setLoading(false);
       }
     } catch (err: any) {
       setError(err.errors?.[0]?.message || err.message);
-    } finally {
       setLoading(false);
     }
   };

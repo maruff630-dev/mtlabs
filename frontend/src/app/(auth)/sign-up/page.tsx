@@ -12,7 +12,7 @@ export default function SignUpPage() {
   const router = useRouter();
   const { client } = useClerk();
   const signUpObj = useSignUp();
-  const { signUp } = signUpObj as any;
+  const { isLoaded, signUp } = signUpObj as any;
   
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -51,28 +51,26 @@ export default function SignUpPage() {
 
   const submitForm = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!signUp) return;
+    if (!isLoaded || !signUp) return;
     
     setLoading(true);
     setError("");
 
     try {
-      const { error: createError } = await signUp.create({
+      await signUp.create({
         firstName,
         lastName,
         emailAddress,
         password,
       });
-      if (createError) throw createError;
 
       // Send verification email
-      const { error: sendError } = await signUp.verifications.sendEmailCode();
-      if (sendError) throw sendError;
+      await signUp.prepareVerification({ strategy: "email_code" });
       
       router.push("/verify");
+      // Intentionally not setting loading to false so the spinner stays while navigating
     } catch (err: any) {
       setError(err.errors?.[0]?.message || err.message);
-    } finally {
       setLoading(false);
     }
   };

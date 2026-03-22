@@ -11,7 +11,7 @@ export default function VerifyPage() {
   const router = useRouter();
   const signUpObj = useSignUp();
   // Using as any to safely destructure newer hooks properties based on our v7 API integration
-  const { isLoaded, signUp } = signUpObj as any;
+  const { isLoaded, signUp, setActive } = signUpObj as any;
   
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
@@ -27,22 +27,21 @@ export default function VerifyPage() {
     setError("");
 
     try {
-      const { error: verifyError } = await signUp.verifications.verifyEmailCode({
+      const completeSignUp = await signUp.attemptVerification({
+        strategy: "email_code",
         code,
       });
-      if (verifyError) throw verifyError;
       
-      if (signUp.status !== 'complete') {
+      if (completeSignUp.status !== 'complete') {
         setError("Missing requirements. Please try again.");
+        setLoading(false);
       } else {
-        const { error: finalizeError } = await signUp.finalize();
-        if (finalizeError) throw finalizeError;
+        await setActive({ session: completeSignUp.createdSessionId });
         router.push("/dashboard");
       }
     } catch (err: any) {
       setError(err.errors?.[0]?.message || err.message || "Invalid verification code.");
       setCode(""); // Clear the code on error for quick re-entry
-    } finally {
       setLoading(false);
     }
   };
@@ -137,7 +136,7 @@ export default function VerifyPage() {
 
       <div className="text-center pt-2">
           <p className="text-xs font-semibold text-slate-500">
-             Didn&apos;t receive a code? <button onClick={() => signUp?.verifications.sendEmailCode()} className="text-blue-600 hover:text-blue-700 hover:underline inline-flex items-center">Resend now</button>
+             Didn&apos;t receive a code? <button type="button" onClick={() => signUp?.prepareVerification({ strategy: "email_code" })} className="text-blue-600 hover:text-blue-700 hover:underline inline-flex items-center">Resend now</button>
           </p>
       </div>
 
