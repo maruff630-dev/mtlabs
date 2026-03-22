@@ -173,7 +173,7 @@ export default function VideoDownloader() {
     setSliderPos(pct);
   };
 
-  const handleUpscale = (e: React.FormEvent) => {
+  const handleUpscale = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!url || !meta) return;
     setCreditError("");
@@ -184,20 +184,49 @@ export default function VideoDownloader() {
     }
 
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
+
+    try {
+      let upscaledUrl: string | null = null;
+
+      // Only call real AI if it's a short video with a real thumbnail
+      if (meta.isShort && meta.thumbnail) {
+        const res = await fetch("/api/upscale/video", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ imageUrl: meta.thumbnail, quality: selectedQuality }),
+        });
+        const data = await res.json();
+        if (data.url) upscaledUrl = data.url;
+      }
+
       setResult({
         title: meta.title,
         thumbnail: meta.thumbnail,
+        upscaledThumbnail: upscaledUrl,   // real AI output
         quality: meta.isShort ? selectedQuality : "1080p",
         platform: meta.platform,
         duration: meta.durationSec,
         upscaled: meta.isShort,
       });
+
       if (meta.isShort) {
         addHistoryItem({ url, platform: meta.platform, thumbnail: meta.thumbnail, quality: selectedQuality, creditsUsed: cost, duration: meta.durationSec || 0 });
       }
-    }, meta.isShort ? 4000 : 2500);
+    } catch (err: any) {
+      console.error("Upscale error:", err);
+      // Graceful fallback — still show result with CSS filter simulation
+      setResult({
+        title: meta.title,
+        thumbnail: meta.thumbnail,
+        upscaledThumbnail: null,
+        quality: meta.isShort ? selectedQuality : "1080p",
+        platform: meta.platform,
+        duration: meta.durationSec,
+        upscaled: meta.isShort,
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -430,11 +459,15 @@ export default function VideoDownloader() {
                         onTouchStart={() => setDragging(true)}
                         onTouchEnd={() => setDragging(false)}
                       >
-                        {/* After (full) */}
-                        <img src={result.thumbnail} alt="after" className="absolute inset-0 w-full h-full object-cover"
-                          style={{ filter: QUALITY_FILTERS[result.quality] || QUALITY_FILTERS.HD }} />
+                        {/* ── AFTER (upscaled) — real AI output or CSS filter ── */}
+                        {result.upscaledThumbnail ? (
+                          <img src={result.upscaledThumbnail} alt="after" className="absolute inset-0 w-full h-full object-cover" />
+                        ) : (
+                          <img src={result.thumbnail} alt="after" className="absolute inset-0 w-full h-full object-cover"
+                            style={{ filter: QUALITY_FILTERS[result.quality] || QUALITY_FILTERS.HD }} />
+                        )}
 
-                        {/* Before (clipped to left of slider) */}
+                        {/* ── BEFORE (original) — always original thumbnail, clipped ── */}
                         <div className="absolute inset-0 overflow-hidden" style={{ width: `${sliderPos}%` }}>
                           <img src={result.thumbnail} alt="before" className="w-full h-full object-cover"
                             style={{ width: `${100 / (sliderPos / 100)}%`, maxWidth: "none", filter: QUALITY_FILTERS.original }} />
@@ -449,7 +482,9 @@ export default function VideoDownloader() {
 
                         {/* Labels */}
                         <div className="absolute top-3 left-3 px-2.5 py-1 bg-black/60 backdrop-blur-md text-white text-[11px] font-black rounded-lg">ORIGINAL</div>
-                        <div className="absolute top-3 right-3 px-2.5 py-1 bg-blue-600/90 backdrop-blur-md text-white text-[11px] font-black rounded-lg">{result.quality} UPSCALED</div>
+                        <div className={`absolute top-3 right-3 px-2.5 py-1 backdrop-blur-md text-white text-[11px] font-black rounded-lg ${result.upscaledThumbnail ? "bg-blue-600/90" : "bg-violet-600/80"}`}>
+                          {result.upscaledThumbnail ? `✨ AI ${result.quality}` : `${result.quality} (Sim)`}
+                        </div>
                       </div>
 
                       {/* Download button */}
