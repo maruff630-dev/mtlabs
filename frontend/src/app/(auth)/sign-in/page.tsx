@@ -183,8 +183,15 @@ export default function SignInPage() {
             )}
           </button>
         </form>
-      </div>
+    </div>
 
-    </motion.div>
+    {/* Discreet Admin Access Link */}
+    <div className="mt-4 text-center">
+      <Link href="/admin/login" className="text-[11px] text-slate-300 hover:text-slate-500 transition-colors font-medium">
+        Admin Access
+      </Link>
+    </div>
+
+  </motion.div>
   );
 }

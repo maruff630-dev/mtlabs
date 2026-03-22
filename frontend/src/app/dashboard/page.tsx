@@ -47,10 +47,9 @@ export default function Dashboard() {
         <nav className="flex-1 py-6 flex flex-col gap-2 px-3 overflow-y-auto overflow-x-hidden">
            {[
              { icon: BrainCircuit, label: 'Dashboard', active: true, href: '/dashboard' },
-             { icon: Video, label: 'Video Toolkit', href: '/tools/video-downloader' },
+                       { icon: Video, label: 'Video Toolkit', href: '/tools/video-downloader' },
              { icon: Sparkles, label: 'AI Studio', href: '/tools/ai' },
              { icon: ShoppingBag, label: 'Marketplace', href: '/marketplace' },
-             { icon: ShieldCheck, label: 'Admin Panel', href: '/admin/panel' }
            ].map((item, i) => (
               <Link href={item.href} key={i} className={`flex items-center h-12 rounded-xl transition-all group overflow-hidden shrink-0 border border-transparent
                 ${item.active ? 'bg-blue-50 text-blue-600 border-blue-100' : 'text-slate-500 hover:bg-slate-50 hover:border-slate-200'}
