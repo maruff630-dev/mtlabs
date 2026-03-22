@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
+import NextTopLoader from 'nextjs-toploader';
 import "./globals.css";
 
 const geistSans = Geist({
@@ -31,7 +32,10 @@ export default function RootLayout({
         suppressHydrationWarning
         className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       >
-        <body suppressHydrationWarning className="min-h-full flex flex-col">{children}</body>
+        <body suppressHydrationWarning className="min-h-full flex flex-col">
+          <NextTopLoader color="#3b82f6" height={3} showSpinner={false} shadow="0 0 15px #3b82f6,0 0 5px #3b82f6" />
+          {children}
+        </body>
       </html>
     </ClerkProvider>
   );

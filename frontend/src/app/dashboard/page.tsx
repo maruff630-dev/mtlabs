@@ -36,27 +36,27 @@ export default function Dashboard() {
         onMouseLeave={() => setIsHovered(false)}
       >
         {/* Logo Area */}
-        <Link href="/" className="h-20 flex items-center justify-center border-b border-slate-100 shrink-0 hover:bg-slate-50 transition-colors">
-          <Image src="/mt-labs-logo.png" width={40} height={40} alt="MT Labs" className={`transition-all duration-300 ${isHovered ? 'mr-3 scale-100' : 'scale-110'}`} />
-          {isHovered && <span className="text-xl font-black text-slate-800 tracking-tight whitespace-nowrap overflow-hidden">MT Labs</span>}
+        <Link href="/" className="h-20 flex items-center justify-center border-b border-slate-100 shrink-0 hover:bg-slate-50 transition-colors overflow-hidden px-4">
+          <Image src="/mt-labs-logo.png" width={48} height={48} alt="MT Labs" className={`transition-all duration-300 shrink-0 ${isHovered ? 'mr-3' : ''}`} />
+          {isHovered && <span className="text-[22px] font-black text-slate-800 tracking-tight whitespace-nowrap -mt-1">MT Labs</span>}
         </Link>
 
         {/* Navigation Links */}
         <nav className="flex-1 py-6 flex flex-col gap-2 px-3 overflow-y-auto overflow-x-hidden">
            {[
-             { icon: BrainCircuit, label: 'Dashboard', active: true },
-             { icon: Video, label: 'Video Toolkit' },
-             { icon: Sparkles, label: 'AI Studio' },
-             { icon: ShoppingBag, label: 'Marketplace' },
-             { icon: ShieldCheck, label: 'Admin Panel' }
+             { icon: BrainCircuit, label: 'Dashboard', active: true, href: '/dashboard' },
+             { icon: Video, label: 'Video Toolkit', href: '/tools/video-downloader' },
+             { icon: Sparkles, label: 'AI Studio', href: '/tools/ai' },
+             { icon: ShoppingBag, label: 'Marketplace', href: '/marketplace' },
+             { icon: ShieldCheck, label: 'Admin Panel', href: '/admin/panel' }
            ].map((item, i) => (
-              <button key={i} className={`flex items-center h-12 rounded-xl transition-all group overflow-hidden shrink-0 border border-transparent
+              <Link href={item.href} key={i} className={`flex items-center h-12 rounded-xl transition-all group overflow-hidden shrink-0 border border-transparent
                 ${item.active ? 'bg-blue-50 text-blue-600 border-blue-100' : 'text-slate-500 hover:bg-slate-50 hover:border-slate-200'}
                 ${isHovered ? 'px-4 justify-start' : 'justify-center mx-auto w-12'}
               `}>
                  <item.icon className={`w-5 h-5 shrink-0 transition-colors ${item.active ? 'text-blue-600' : 'text-slate-400 group-hover:text-slate-600'}`} />
                  {isHovered && <span className="ml-4 font-bold text-sm whitespace-nowrap">{item.label}</span>}
-              </button>
+              </Link>
            ))}
         </nav>
 
