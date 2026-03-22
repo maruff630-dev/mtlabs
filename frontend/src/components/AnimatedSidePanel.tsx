@@ -43,9 +43,7 @@ export default function AnimatedSidePanel() {
     <div suppressHydrationWarning className="hidden lg:flex w-1/2 relative bg-indigo-600 shadow-2xl items-center justify-center overflow-hidden">
       {/* Top Left Logo */}
       <div suppressHydrationWarning className="absolute top-10 left-10 z-30 flex items-center gap-4 group">
-         <div className="p-2 bg-white rounded-2xl shadow-xl group-hover:scale-110 transition-transform">
-           <Image src="/mt-labs-logo.png" width={40} height={40} alt="MT Labs" />
-         </div>
+         <Image src="/mt-labs-logo.png" width={80} height={80} alt="MT Labs" className="drop-shadow-2xl group-hover:scale-110 transition-transform duration-300" />
          <h1 className="text-4xl font-black text-white tracking-tighter drop-shadow-2xl">MT Labs</h1>
       </div>
 
